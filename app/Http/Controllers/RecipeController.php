@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
@@ -12,12 +11,12 @@ class RecipeController extends Controller
 {
     public function getRecipes(Request $request)
     {
-        $query = $request->query('q', 'chicken'); // Default query is 'chicken' (update later for random recipe?)
+        $query = $request->query('q');
 
-        if (app()->environment('local')) {
+        if ($query) {
             return $this->getApiRecipes($query);
-
         } else {
+            return $this->getRandomRecipes();
         }
     }
 
@@ -66,5 +65,13 @@ class RecipeController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    private function getRandomRecipes()
+    {
+        $queries = ['chicken', 'beef', 'pasta', 'salad', 'soup', 'dessert', 'fish', 'vegetarian'];
+        $randomQuery = $queries[array_rand($queries)];
+        
+        return $this->getApiRecipes($randomQuery);
     }
 }
