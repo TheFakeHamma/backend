@@ -71,7 +71,12 @@ class RecipeController extends Controller
     {
         $queries = ['chicken', 'beef', 'pasta', 'salad', 'soup', 'dessert', 'fish', 'vegetarian'];
         $randomQuery = $queries[array_rand($queries)];
-        
-        return $this->getApiRecipes($randomQuery);
+        $recipes = $this->getApiRecipes($randomQuery);
+
+        // Assuming getApiRecipes returns a JSON response, add the query to the response
+        return response()->json([
+            'query' => $randomQuery,
+            'hits' => json_decode($recipes->getContent(), true)['hits']
+        ]);
     }
 }
