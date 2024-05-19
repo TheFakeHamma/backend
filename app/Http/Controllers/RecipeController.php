@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Support\Facades\Log;
@@ -11,7 +12,17 @@ class RecipeController extends Controller
 {
     public function getRecipes(Request $request)
     {
-        $query = $request->query('q', 'chicken'); // Default query is 'chicken' REMOVE LATER
+        $query = $request->query('q', 'chicken'); // Default query is 'chicken' (update later for random recipe?)
+
+        if (app()->environment('local')) {
+            return $this->getApiRecipes($query);
+
+        } else {
+        }
+    }
+
+    private function getApiRecipes($query)
+    {
         $client = new Client();
         $options = [
             'query' => [
@@ -22,7 +33,7 @@ class RecipeController extends Controller
             ],
         ];
 
-        // SSL verification disabled for development purposes
+        // SSL disabled for local development
         if (env('DISABLE_SSL_VERIFICATION', false)) {
             $options['verify'] = false;
         }

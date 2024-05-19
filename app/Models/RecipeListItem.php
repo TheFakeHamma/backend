@@ -10,10 +10,12 @@ class RecipeListItem extends Model
     use HasFactory;
 
     protected $fillable = [
-        'recipe_id',
+        'recipe_list_id',
+        'recipe_url',
         'recipe_name',
         'recipe_image',
-        'recipe_list_id',
+        'custom_recipe_id',
+        'recipe_uri',
     ];
 
     public function recipeList()
